@@ -15,5 +15,14 @@
     "moment": "^2.29.1",
     "nodemon": "^2.0.7",
     "socket.io": "^3.0.5"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ho3einmolavi/chat-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ho3einmolavi/chat-app/issues"
+  },
+  "homepage": "https://github.com/ho3einmolavi/chat-app#readme"
 }
