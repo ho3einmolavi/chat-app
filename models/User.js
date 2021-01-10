@@ -7,7 +7,20 @@ const UserSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: 'email is required!'
+        required: 'email is required!',
+        validate: {
+            validator: async function (email) {
+                const user = await this.constructor.findOne({email});
+                if (user) {
+                    if (this.id === user.id) {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            },
+            message: 'The specified email address is already in use.'
+        },
     },
     password: {
         type: String,
@@ -18,4 +31,4 @@ const UserSchema = mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model('User' , UserSchema)
+module.exports = mongoose.model('User', UserSchema)

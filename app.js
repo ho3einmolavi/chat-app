@@ -5,6 +5,9 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+//Bring in routes
+app.use('/api/user',require('./routes/user'))
+
 const errorHandlers = require('./handlers/errorHandlers')
 app.use(errorHandlers.notFound)
 app.use(errorHandlers.mongooseErrors)
