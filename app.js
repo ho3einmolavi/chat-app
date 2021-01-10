@@ -7,6 +7,7 @@ app.use(express.urlencoded({extended: true}))
 
 //Bring in routes
 app.use('/api/user',require('./routes/user'))
+app.use('/api/chatroom',require('./routes/chatroom'))
 
 const errorHandlers = require('./handlers/errorHandlers')
 app.use(errorHandlers.notFound)

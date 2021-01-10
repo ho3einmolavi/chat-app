@@ -31,9 +31,25 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     let {email, password} = req.body
+
+    const schema = Joi.object({
+        email: Joi.string().email({tlds: {allow: false}}),
+        password: Joi.string().min(6).required()
+    })
+    const result = schema.validate({email, password}, {abortEarly: false})
+    if (result.error) {
+
+        let messages = []
+        result.error.details.forEach(err => {
+            messages.push({name: err.context.key, message: err.message})
+        })
+        return res.send(messages)
+    }
+
+
     const user = await User.findOne({email})
     if (!user) {
-        throw "email and password is not matched"
+        throw "this user does not exist"
     } else {
         const isEqual = await bcrypt.compare(password, user.password)
         if (!isEqual) throw "email and password is not matched"
@@ -43,6 +59,4 @@ exports.login = async (req, res) => {
             token
         })
     }
-
-
 }
