@@ -18,12 +18,16 @@ exports.register = async (req, res) => {
         result.error.details.forEach(err => {
             messages.push({name: err.context.key, message: err.message})
         })
-        return res.send(messages)
+        return res.status(422).send(messages)
     }
 
     const user = new User({name, email, password: await bcrypt.hash(password, 8)})
-    await user.save().then(response => {
-        return res.send(response)
+    await user.save().then(async response => {
+        const token = await jwt.sign({data: response.id}, process.env.SECRET_KEY, {expiresIn: 60 * 60 * 24})
+        return res.send({
+            user: response,
+            token
+        })
     }).catch(err => {
         return res.status(400).send(err)
     })
@@ -43,7 +47,7 @@ exports.login = async (req, res) => {
         result.error.details.forEach(err => {
             messages.push({name: err.context.key, message: err.message})
         })
-        return res.send(messages)
+        return res.status(422).send(messages)
     }
 
 
