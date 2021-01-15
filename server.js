@@ -20,6 +20,28 @@ require('./models/Message')
 const app = require('./app')
 
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Running server on port ${port}`)
+})
+
+const io = require("socket.io")(server)
+const jwt = require("jsonwebtoken")
+
+io.use(async (socket, next) => {
+    try {
+        const token = socket.handshake.query.token
+        const payload = await jwt.verify(token, process.env.SECRET_KEY)
+        socket.userId = payload.data
+        next()
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+io.on("connection" , (socket) => {
+    console.log(`connected ${socket.userId}`)
+
+    socket.on("disconnect" , () => {
+        console.log(`disconnected ${socket.userId}`)
+    })
 })

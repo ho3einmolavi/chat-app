@@ -25,3 +25,8 @@ exports.createChatroom = async (req, res) => {
         return res.status(500).send(err.message)
     })
 }
+
+exports.index = async (req, res) => {
+    const chatrooms = await Chatroom.find({})
+    res.send(chatrooms)
+}
